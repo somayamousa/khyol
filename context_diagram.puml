@@ -1,0 +1,82 @@
+@startuml Context_Diagram
+
+title مخطط السياق لمنصة خيول (Black Box Context Diagram)
+
+'================ إعدادات الشكل =================
+left to right direction
+scale 1.2
+
+skinparam backgroundColor white
+skinparam defaultFontName Arial
+skinparam defaultFontColor black
+skinparam ArrowColor #2F5D8C
+skinparam BorderColor black
+skinparam shadowing true
+skinparam RoundCornerSize 8
+
+skinparam rectangle {
+    BackgroundColor #DCE6F2
+    BorderColor black
+}
+
+'================================================
+' الكيانات الخارجية External Entities
+'================================================
+
+rectangle "صاحب الخيل\n(Horse Owner)\nExternal Entity" as HorseOwner
+rectangle "صاحب المركز\n(Center Owner)\nExternal Entity" as CenterOwner
+rectangle "المشرف\n(Administrator)\nInternal Entity" as Admin
+
+rectangle "المصور\n(Photographer)\nExternal Entity" as Photographer
+rectangle "صاحب العيادة\n(Clinic Owner)\nExternal Entity" as ClinicOwner
+
+rectangle "المستخدم العادي\n(Regular User)\nExternal Entity" as User
+
+database "قاعدة البيانات\n(Database)\nInternal Entity" as DB
+
+'================================================
+' النظام الرئيسي - Black Box
+'================================================
+
+rectangle "نظام منصة خيول\n(Khyol Platform System)\nBlack Box Model" as System #B7D0E8
+
+'================================================
+' العلاقات مع النظام
+'================================================
+
+' صاحب الخيل
+HorseOwner -->|تسجيل الخيل\nإدارة الحجوزات\nالمشاركة بالمزادات| System
+
+System -->|معلومات الخيل\nتأكيدات الحجز\nنتائج المزادات| HorseOwner
+
+' صاحب المركز
+CenterOwner -->|إضافة خدمات المركز\nإدارة المواعيد\nتحديث الأسعار| System
+
+System -->|الحجوزات\nالتقارير\nالإيرادات| CenterOwner
+
+' المشرف
+Admin -->|إدارة المستخدمين\nمراقبة النظام\nإدارة البيانات| System
+
+System -->|تقارير النظام\nالإحصائيات\nالتنبيهات| Admin
+
+' المصور
+Photographer -->|رفع الصور\nإدارة الألبومات| System
+
+System -->|معلومات المعارض\nطلبات التصوير| Photographer
+
+' صاحب العيادة
+ClinicOwner -->|إضافة الخدمات الصحية\nإدارة المواعيد الطبية| System
+
+System -->|بيانات المرضى\nالحجوزات الطبية| ClinicOwner
+
+' المستخدم العادي
+User -->|البحث\nالتصفح\nالحجز| System
+
+System -->|نتائج البحث\nالإشعارات\nتأكيدات الحجز| User
+
+' قاعدة البيانات
+System -->|تخزين البيانات| DB
+
+DB -->|استرجاع البيانات| System
+
+@enduml

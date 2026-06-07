@@ -1,0 +1,259 @@
+@startuml HorseOwnerActivities
+
+title صاحب الخيل - الأنشطة الكاملة (Horse Owner - Complete Activities)
+
+left to right direction
+scale 1.3
+
+skinparam backgroundColor white
+skinparam defaultFontName Arial
+skinparam defaultFontColor black
+skinparam ArrowColor #2F5D8C
+skinparam BorderColor black
+skinparam shadowing true
+skinparam RoundCornerSize 8
+
+skinparam usecase {
+    BackgroundColor #E8F0F7
+    BorderColor black
+}
+
+skinparam actor {
+    BackgroundColor #FCE4D6
+    BorderColor black
+}
+
+' الفاعل
+actor "صاحب الخيل\n(Horse Owner)" as HorseOwner
+
+package "نظام منصة خيول - صاحب الخيل" as HorseOwnerSys {
+
+    '========== إدارة الحسابات ==========
+    usecase "تسجيل الدخول" as UC_Login
+    usecase "عرض حسابي" as UC_MyAccount
+    usecase "تحديث بيانات الحساب" as UC_UpdateProfile
+    usecase "تسجيل الخروج" as UC_Logout
+
+    '========== إدارة الخيول ==========
+    usecase "إضافة خيل جديد" as UC_AddHorse
+    usecase "عرض قائمة خيولي" as UC_ViewMyHorses
+    usecase "عرض تفاصيل الخيل" as UC_ViewHorseDetails
+    usecase "تحرير بيانات الخيل" as UC_EditHorse
+    usecase "تحميل صور المعرض" as UC_UploadGallery
+    usecase "تحميل فيديوهات" as UC_UploadVideos
+    usecase "حذف صور/فيديوهات" as UC_DeleteMedia
+
+    '========== السجلات الصحية ==========
+    usecase "عرض السجلات الصحية" as UC_ViewHealthRecords
+    usecase "تسجيل سجل طبي" as UC_AddHealthRecord
+    usecase "عرض اللقاحات" as UC_ViewVaccinations
+    usecase "تسجيل لقاح جديد" as UC_AddVaccination
+    usecase "عرض الشهادات" as UC_ViewCertificates
+    usecase "إضافة شهادة/رخصة" as UC_AddCertificate
+    usecase "عرض المواعيد الطبية" as UC_ViewClinicAppointments
+    usecase "حذف السجلات" as UC_DeleteRecords
+
+    '========== سوق بيع الخيول ==========
+    usecase "تفعيل بيع الخيل" as UC_EnableHorseSale
+    usecase "إدخال سعر البيع" as UC_SetSalePrice
+    usecase "كتابة وصف البيع" as UC_WriteSaleDesc
+    usecase "عرض صفحة الخيل العامة" as UC_ViewPublicHorsePage
+    usecase "التواصل مع المشترين" as UC_ContactBuyers
+    usecase "عرض بيانات البائع" as UC_ViewSellerInfo
+
+    '========== المزادات ==========
+    usecase "إنشاء مزاد جديد" as UC_CreateAuction
+    usecase "اختيار الخيل للمزاد" as UC_SelectHorseAuction
+    usecase "إدخال سعر البداية" as UC_SetStartingPrice
+    usecase "إدخال سعر الحد الأدنى" as UC_SetReservePrice
+    usecase "إدخال سعر الشراء الفوري" as UC_SetBuyoutPrice
+    usecase "تحديد مدة المزاد" as UC_SetAuctionDuration
+    usecase "عرض المزادات الجارية" as UC_ViewLiveAuctions
+    usecase "عرض المزادات المجدولة" as UC_ViewScheduledAuctions
+    usecase "عرض المزادات المنتهية" as UC_ViewEndedAuctions
+    usecase "عرض إحصائيات المزاد" as UC_ViewAuctionStats
+    usecase "عرض قائمة المزايدين" as UC_ViewBidders
+    usecase "عرض الفائز" as UC_ViewWinner
+
+    '========== الإيواء والتدريب ==========
+    usecase "اختيار مركز للإيواء" as UC_SelectBoardingCenter
+    usecase "اختيار الخيل" as UC_SelectHorseBoarding
+    usecase "إدخال الرسم الشهري" as UC_SetMonthlyFee
+    usecase "إدخال نسبة المدرب" as UC_SetTrainerShare
+    usecase "تحديد تاريخ البدء" as UC_SetStartDate
+    usecase "إضافة ملاحظات" as UC_AddBoardingNotes
+    usecase "عرض اتفاقيات الإيواء" as UC_ViewBoardingAgreements
+    usecase "تتبع حالة الخيل" as UC_TrackHorseStatus
+    usecase "عرض الإيرادات من الإيواء" as UC_ViewBoardingRevenue
+
+    '========== الحجوزات والخدمات ==========
+    usecase "عرض حجوزاتي" as UC_ViewMyBookings
+    usecase "عرض تفاصيل الحجز" as UC_ViewBookingDetails
+    usecase "إلغاء الحجز" as UC_CancelBooking
+    usecase "تقييم الخدمة" as UC_RateService
+    usecase "تقييم المركز" as UC_RateCenter
+    usecase "تقييم الطبيب" as UC_RateVet
+    usecase "كتابة تعليق" as UC_WriteReview
+
+    '========== جلسات التصوير ==========
+    usecase "عرض باقات التصوير" as UC_ViewPhotoPackages
+    usecase "اختيار الباقة" as UC_SelectPackage
+    usecase "حجز جلسة تصوير" as UC_BookPhotoshoot
+    usecase "اختيار التاريخ والوقت" as UC_SelectDateTime
+    usecase "عرض جلساتي" as UC_ViewMyPhotoshoots
+    usecase "الدفع للجلسة" as UC_PayPhotoshoot
+
+    '========== التسوق والمتجر ==========
+    usecase "البحث عن المنتجات" as UC_SearchProducts
+    usecase "إضافة للسلة" as UC_AddToCart
+    usecase "عرض السلة" as UC_ViewCart
+    usecase "الشراء والدفع" as UC_Checkout
+    usecase "عرض الطلبيات" as UC_ViewOrders
+    usecase "تتبع الطلبية" as UC_TrackOrder
+
+    '========== المحتوى والتعليم ==========
+    usecase "عرض المقالات الطبية" as UC_ViewArticles
+    usecase "عرض أمراض الخيول" as UC_ViewDiseases
+    usecase "البحث في المحتوى" as UC_SearchContent
+    usecase "قراءة النصائح والتوصيات" as UC_ReadTips
+
+    '========== التواصل والإشعارات ==========
+    usecase "عرض الإشعارات" as UC_ViewNotifications
+    usecase "تلقي الإشعارات" as UC_ReceiveNotifications
+    usecase "الدردشة مع المراكز" as UC_ChatWithCenters
+    usecase "الدردشة مع العيادات" as UC_ChatWithClinics
+    usecase "الدردشة مع المصورين" as UC_ChatWithPhotographers
+    usecase "الدردشة مع المشترين" as UC_ChatWithBuyers
+    usecase "التواصل عبر الواتساب" as UC_WhatsAppContact
+    usecase "الاتصال المباشر" as UC_DirectCall
+    usecase "البريد الإلكتروني" as UC_EmailContact
+
+    '========== التقارير والإحصائيات ==========
+    usecase "لوحة التحكم الرئيسية" as UC_Dashboard
+    usecase "إحصائيات الخيول" as UC_HorseStats
+    usecase "إحصائيات المزادات" as UC_AuctionStats
+    usecase "الإيرادات الإجمالية" as UC_TotalRevenue
+    usecase "التقارير الشهرية" as UC_MonthlyReports
+
+}
+
+'================================================
+' العلاقات
+'================================================
+
+HorseOwner --> UC_Login
+HorseOwner --> UC_MyAccount
+HorseOwner --> UC_UpdateProfile
+HorseOwner --> UC_Logout
+
+HorseOwner --> UC_AddHorse
+HorseOwner --> UC_ViewMyHorses
+HorseOwner --> UC_ViewHorseDetails
+HorseOwner --> UC_EditHorse
+HorseOwner --> UC_UploadGallery
+HorseOwner --> UC_UploadVideos
+HorseOwner --> UC_DeleteMedia
+
+HorseOwner --> UC_ViewHealthRecords
+HorseOwner --> UC_AddHealthRecord
+HorseOwner --> UC_ViewVaccinations
+HorseOwner --> UC_AddVaccination
+HorseOwner --> UC_ViewCertificates
+HorseOwner --> UC_AddCertificate
+HorseOwner --> UC_ViewClinicAppointments
+HorseOwner --> UC_DeleteRecords
+
+HorseOwner --> UC_EnableHorseSale
+HorseOwner --> UC_SetSalePrice
+HorseOwner --> UC_WriteSaleDesc
+HorseOwner --> UC_ViewPublicHorsePage
+HorseOwner --> UC_ContactBuyers
+HorseOwner --> UC_ViewSellerInfo
+
+HorseOwner --> UC_CreateAuction
+HorseOwner --> UC_SelectHorseAuction
+HorseOwner --> UC_SetStartingPrice
+HorseOwner --> UC_SetReservePrice
+HorseOwner --> UC_SetBuyoutPrice
+HorseOwner --> UC_SetAuctionDuration
+HorseOwner --> UC_ViewLiveAuctions
+HorseOwner --> UC_ViewScheduledAuctions
+HorseOwner --> UC_ViewEndedAuctions
+HorseOwner --> UC_ViewAuctionStats
+HorseOwner --> UC_ViewBidders
+HorseOwner --> UC_ViewWinner
+
+HorseOwner --> UC_SelectBoardingCenter
+HorseOwner --> UC_SelectHorseBoarding
+HorseOwner --> UC_SetMonthlyFee
+HorseOwner --> UC_SetTrainerShare
+HorseOwner --> UC_SetStartDate
+HorseOwner --> UC_AddBoardingNotes
+HorseOwner --> UC_ViewBoardingAgreements
+HorseOwner --> UC_TrackHorseStatus
+HorseOwner --> UC_ViewBoardingRevenue
+
+HorseOwner --> UC_ViewMyBookings
+HorseOwner --> UC_ViewBookingDetails
+HorseOwner --> UC_CancelBooking
+HorseOwner --> UC_RateService
+HorseOwner --> UC_RateCenter
+HorseOwner --> UC_RateVet
+HorseOwner --> UC_WriteReview
+
+HorseOwner --> UC_ViewPhotoPackages
+HorseOwner --> UC_SelectPackage
+HorseOwner --> UC_BookPhotoshoot
+HorseOwner --> UC_SelectDateTime
+HorseOwner --> UC_ViewMyPhotoshoots
+HorseOwner --> UC_PayPhotoshoot
+
+HorseOwner --> UC_SearchProducts
+HorseOwner --> UC_AddToCart
+HorseOwner --> UC_ViewCart
+HorseOwner --> UC_Checkout
+HorseOwner --> UC_ViewOrders
+HorseOwner --> UC_TrackOrder
+
+HorseOwner --> UC_ViewArticles
+HorseOwner --> UC_ViewDiseases
+HorseOwner --> UC_SearchContent
+HorseOwner --> UC_ReadTips
+
+HorseOwner --> UC_ViewNotifications
+HorseOwner --> UC_ReceiveNotifications
+HorseOwner --> UC_ChatWithCenters
+HorseOwner --> UC_ChatWithClinics
+HorseOwner --> UC_ChatWithPhotographers
+HorseOwner --> UC_ChatWithBuyers
+HorseOwner --> UC_WhatsAppContact
+HorseOwner --> UC_DirectCall
+HorseOwner --> UC_EmailContact
+
+HorseOwner --> UC_Dashboard
+HorseOwner --> UC_HorseStats
+HorseOwner --> UC_AuctionStats
+HorseOwner --> UC_TotalRevenue
+HorseOwner --> UC_MonthlyReports
+
+'================================================
+' العلاقات بين الحالات (Dependencies)
+'================================================
+
+UC_ViewHorseDetails -.-> UC_ViewMyHorses : <<include>>
+UC_EditHorse -.-> UC_ViewMyHorses : <<include>>
+UC_UploadGallery -.-> UC_ViewHorseDetails : <<include>>
+UC_UploadVideos -.-> UC_ViewHorseDetails : <<include>>
+UC_AddHealthRecord -.-> UC_ViewHealthRecords : <<include>>
+UC_AddVaccination -.-> UC_ViewVaccinations : <<include>>
+UC_AddCertificate -.-> UC_ViewCertificates : <<include>>
+UC_CreateAuction -.-> UC_SelectHorseAuction : <<include>>
+UC_ViewLiveAuctions -.-> UC_ViewAuctionStats : <<include>>
+UC_SelectBoardingCenter -.-> UC_SelectHorseBoarding : <<include>>
+UC_BookPhotoshoot -.-> UC_SelectPackage : <<include>>
+UC_BookPhotoshoot -.-> UC_PayPhotoshoot : <<include>>
+UC_Checkout -.-> UC_ViewCart : <<include>>
+UC_RateService -.-> UC_ViewMyBookings : <<extend>>
+UC_ChatWithBuyers -.-> UC_ViewPublicHorsePage : <<extend>>
+
+@enduml
