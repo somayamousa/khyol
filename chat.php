@@ -172,13 +172,15 @@ function conv_meta($row, $user_id) {
         }
     } elseif (!empty($row['other_user_id'])) {
         $meta['type'] = 'user';
-        $meta['target_label'] = '🐎 حصان';
+        $meta['target_label'] = '🐎 مزاد';
         $meta['role'] = 'user';
-        // أنا المبادر = user_id، الطرف الآخر = other_user_id (أو العكس)
+        // حدد الطرف الآخر بناءً على من أنت
         if ((int)$row['user_id'] === $user_id) {
+            // أنت المبادر (user_id)، الطرف الآخر هو other_user_id
             $meta['other_name']  = $row['other_user_name']  ?? '';
             $meta['other_image'] = $row['other_user_avatar'] ?? '';
         } else {
+            // أنت الطرف الآخر (other_user_id)، المبادر هو user_id
             $meta['other_name']  = $row['customer_name']  ?? '';
             $meta['other_image'] = $row['customer_avatar'] ?? '';
         }
@@ -234,7 +236,7 @@ if ($active_conversation_id > 0) {
 // === جلب رسائل المحادثة النشطة ===
 $messages = [];
 if ($active) {
-    $mq = $conn->prepare("SELECT id, sender_type, body, attachment_path, attachment_type, attachment_meta, created_at FROM messages WHERE conversation_id = ? ORDER BY id ASC");
+    $mq = $conn->prepare("SELECT id, sender_id, sender_type, body, attachment_path, attachment_type, attachment_meta, created_at FROM messages WHERE conversation_id = ? ORDER BY id ASC");
     $mq->execute([$active_conversation_id]);
     $messages = $mq->fetchAll();
 
@@ -326,7 +328,15 @@ include 'includes/header.php';
                         </div>
                     <?php else: ?>
                         <?php foreach ($messages as $m):
-                            $is_mine = $m['sender_type'] === $active_role;
+                            // تحديد ما إذا كانت الرسالة من المستخدم الحالي
+                            $is_mine = false;
+                            if ($active_type === 'user') {
+                                // في محادثات user-to-user، استخدم sender_id
+                                $is_mine = (int)$m['sender_id'] === $user_id;
+                            } else {
+                                // في محادثات الخدمات، استخدم sender_type
+                                $is_mine = $m['sender_type'] === $active_role;
+                            }
                         ?>
                         <div class="chat-msg <?= $is_mine ? 'mine' : 'theirs' ?>" data-msg-id="<?= $m['id'] ?>">
                             <div class="chat-bubble">
@@ -383,6 +393,8 @@ include 'includes/header.php';
 (function () {
     const conversationId = <?= $active_conversation_id ?>;
     const role = <?= json_encode($active_role) ?>;
+    const conversationType = <?= json_encode($active_type) ?>;
+    const currentUserId = <?= $user_id ?>;
     const messagesEl = document.getElementById('chat-messages');
     const form = document.getElementById('chat-form');
     const input = document.getElementById('chat-input');
@@ -421,7 +433,8 @@ include 'includes/header.php';
         if (messagesEl.querySelector(`[data-msg-id="${msg.id}"]`)) return;
         const noMsg = messagesEl.querySelector('.chat-no-messages');
         if (noMsg) noMsg.remove();
-        const isMine = msg.sender_type === role;
+        // في محادثات user-to-user، استخدم sender_id؛ وإلا استخدم sender_type
+        const isMine = conversationType === 'user' ? msg.sender_id === currentUserId : msg.sender_type === role;
         const div = document.createElement('div');
         div.className = 'chat-msg ' + (isMine ? 'mine' : 'theirs');
         div.dataset.msgId = msg.id;

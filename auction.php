@@ -147,21 +147,26 @@ include 'includes/header.php';
                             🏆 الفائز: <strong><?= sanitize($auction['winner_name']) ?></strong><br>
                             بمبلغ <strong><?= number_format($auction['winner_amount'], 0) ?> ₪</strong>
 
-                            <?php if ($is_winner && $dep_pct > 0): ?>
-                                <?php if ($auction['deposit_paid']): ?>
-                                    <div style="margin-top:10px; background:#1a7a45; color:#fff; padding:8px 16px; border-radius:8px; font-size:14px; display:inline-block;">
-                                        ✅ تم دفع العربون
-                                    </div>
-                                <?php else: ?>
-                                    <div style="margin-top:8px; font-size:13px; color:#555;">
-                                        العربون المطلوب: <strong><?= $dep_pct ?>% = <?= number_format($dep_amount, 0) ?> ₪</strong>
-                                    </div>
-                                    <div style="margin-top:10px;">
-                                        <a href="auction_deposit.php?id=<?= $id ?>&type=winner" class="btn btn-primary" style="font-size:14px; padding:10px 20px;">
-                                            💳 ادفع العربون الآن (<?= number_format($dep_amount, 0) ?> ₪)
-                                        </a>
-                                    </div>
+                            <?php if ($is_winner): ?>
+                                <?php if ($dep_pct > 0): ?>
+                                    <?php if ($auction['deposit_paid']): ?>
+                                        <div style="margin-top:10px; background:#1a7a45; color:#fff; padding:8px 16px; border-radius:8px; font-size:14px; display:inline-block;">
+                                            ✅ تم دفع العربون
+                                        </div>
+                                    <?php else: ?>
+                                        <div style="margin-top:8px; font-size:13px; color:#555;">
+                                            العربون المطلوب: <strong><?= $dep_pct ?>% = <?= number_format($dep_amount, 0) ?> ₪</strong>
+                                        </div>
+                                        <div style="margin-top:10px;">
+                                            <a href="auction_deposit.php?id=<?= $id ?>&type=winner" class="btn btn-primary" style="font-size:14px; padding:10px 20px;">
+                                                💳 ادفع العربون الآن (<?= number_format($dep_amount, 0) ?> ₪)
+                                            </a>
+                                        </div>
+                                    <?php endif; ?>
                                 <?php endif; ?>
+                                <div style="margin-top:10px;">
+                                    <a href="chat.php?user_id=<?= (int)$auction['seller_id'] ?>" class="btn btn-primary" style="font-size:13px; padding:6px 14px;">💬 التواصل مع صاحب المزاد</a>
+                                </div>
                             <?php elseif ($is_seller): ?>
                                 <?php if ($dep_pct > 0 && !$auction['deposit_paid']): ?>
                                     <div style="margin-top:6px; font-size:12px; color:#e67e22;">⏳ بانتظار دفع العربون من الفائز</div>
@@ -169,7 +174,7 @@ include 'includes/header.php';
                                     <div style="margin-top:6px; font-size:12px; color:#27ae60;">✅ الفائز دفع العربون</div>
                                 <?php endif; ?>
                                 <div style="margin-top:10px;">
-                                    <a href="chat.php?winner_id=<?= (int)$auction['winner_id'] ?>" class="btn btn-primary" style="font-size:13px; padding:6px 14px;">💬 التواصل مع الفائز</a>
+                                    <a href="chat.php?user_id=<?= (int)$auction['winner_id'] ?>" class="btn btn-primary" style="font-size:13px; padding:6px 14px;">💬 التواصل مع الفائز</a>
                                 </div>
                             <?php endif; ?>
                         </div>

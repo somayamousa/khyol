@@ -22,7 +22,7 @@ if ($conversation_id <= 0) {
 
 // التحقق من صلاحية المستخدم
 $stmt = $conn->prepare("
-    SELECT c.user_id, c.center_id, c.clinic_id, c.photographer_id, c.is_admin_chat,
+    SELECT c.user_id, c.other_user_id, c.center_id, c.clinic_id, c.photographer_id, c.is_admin_chat,
            ce.owner_id AS center_owner,
            cl.owner_id AS clinic_owner,
            pg.owner_id AS studio_owner
@@ -43,6 +43,10 @@ if (!$conv) {
 
 $viewer_type = null;
 if (!empty($conv['is_admin_chat']) && (int)$conv['user_id'] === $user_id) {
+    $viewer_type = 'user';
+} elseif (!empty($conv['other_user_id']) && 
+          ((int)$conv['user_id'] === $user_id || (int)$conv['other_user_id'] === $user_id)) {
+    // محادثة user-to-user
     $viewer_type = 'user';
 } elseif ((int)$conv['user_id'] === $user_id) {
     $viewer_type = 'user';
@@ -75,6 +79,10 @@ $messages = $q->fetchAll();
 if (!empty($conv['is_admin_chat'])) {
     $mark = $conn->prepare("UPDATE messages SET is_read = 1 WHERE conversation_id = ? AND sender_type = 'admin' AND is_read = 0");
     $mark->execute([$conversation_id]);
+} elseif (!empty($conv['other_user_id'])) {
+    // محادثة user-to-user: تحديد رسائل الطرف الآخر
+    $mark = $conn->prepare("UPDATE messages SET is_read = 1 WHERE conversation_id = ? AND sender_id != ? AND is_read = 0");
+    $mark->execute([$conversation_id, $user_id]);
 } else {
     $target_type = $conv['center_id'] ? 'center' : ($conv['clinic_id'] ? 'clinic' : 'photographer');
     $opposite = $viewer_type === 'user' ? $target_type : 'user';
